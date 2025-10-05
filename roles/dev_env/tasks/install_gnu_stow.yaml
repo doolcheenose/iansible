@@ -1,0 +1,67 @@
+# Need to build from source since package managers for ubuntu <= 24 do not yet have stow 2.4.x, which is needed to
+# support dotfiles repo
+---
+- name: "Check whether stow is already installed"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+
+      if stow --version >/dev/null 2>&1; then
+        stow --version | awk '{print $NF}'
+      else
+        echo not_installed
+      fi
+    executable: bash
+  register: stow_version_cmd
+  changed_when: false
+
+- name: "Show stow version"
+  ansible.builtin.debug:
+    msg: "GNU stow: {{ stow_version_cmd.stdout }}"
+
+- name: "Download and install GNU stow"
+  when: stow_version_cmd.stdout == 'not_installed' or stow_version_cmd.stdout is version('2.4.0', '<')
+  block:
+    - name: "Create temporary directory as workspace"
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: stow
+      register: stow_tempdir
+
+    - name: "Print temporary directory"
+      ansible.builtin.debug:
+        var: stow_tempdir.path
+
+    - name: "Download stow source tarball"
+      ansible.builtin.get_url:
+        url: "{{ dev_env_stow_download_url }}/stow-{{ dev_env_stow_version }}.tar.gz"
+        dest: /tmp/
+        mode: "0755"
+        checksum: "{{ dev_env_stow_archive_checksum }}"
+
+    - name: "Unpack stow source tarball"
+      ansible.builtin.unarchive:
+        src: "/tmp/stow-{{ dev_env_stow_version }}.tar.gz"
+        dest: "{{ stow_tempdir.path }}"
+        remote_src: true
+
+    - name: "Build and install stow"
+      ansible.builtin.shell:
+        cmd: "./configure && make install"
+        chdir: "{{ stow_tempdir.path }}/stow-{{ dev_env_stow_version }}"
+      changed_when: true
+      become: true
+      register: stow_install
+      failed_when: stow_install.rc != 0
+
+  always:
+    - name: "Remove temporary directory"
+      ansible.builtin.file:
+        path: "{{ stow_tempdir.path }}"
+        state: absent
+      when: stow_tempdir is defined
+
+    - name: "Remove stow source tarball"
+      ansible.builtin.file:
+        path: "/tmp/stow-{{ dev_env_stow_version }}.tar.gz"
+        state: absent

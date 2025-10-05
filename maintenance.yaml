@@ -1,0 +1,8 @@
+---
+- name: "Perform regular maintenance tasks"
+  hosts: all
+  remote_user: ian
+  gather_facts: true
+
+  roles:
+    - maintenance

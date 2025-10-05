@@ -1,0 +1,9 @@
+desktops:
+  hosts:
+    desktop.local:
+piholes:
+  hosts:
+    pihole.local:
+media_servers:
+  hosts:
+    optiplex.local:

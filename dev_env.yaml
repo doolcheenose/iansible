@@ -1,0 +1,8 @@
+---
+- name: "Set up development environment"
+  hosts: all
+  remote_user: ian
+  gather_facts: true
+
+  roles:
+    - dev_env

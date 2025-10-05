@@ -1,0 +1,7 @@
+dev_env_configs_to_stow:
+  - neovim
+  - tmux
+
+dev_env_stow_download_url: https://ftp.gnu.org/gnu/stow
+dev_env_stow_version: 2.4.1
+dev_env_stow_archive_checksum: "sha256:2a671e75fc207303bfe86a9a7223169c7669df0a8108ebdf1a7fe8cd2b88780b"

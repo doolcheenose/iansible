@@ -1,0 +1,38 @@
+---
+- name: "Add unstable neovim APT repository"
+  ansible.builtin.apt_repository:
+    repo: "ppa:neovim-ppa/unstable"
+  become: true
+  # when: this fails for rpi, ppa is only for ubuntu
+
+- name: "Install packages with APT"
+  ansible.builtin.apt:
+    update_cache: true
+    pkg:
+      - neovim
+      - tmux
+      - make
+      - clang
+      - software-properties-common
+      - curl
+      - gpg
+      - git
+  become: true
+
+- name: "Install GNU stow"
+  ansible.builtin.include_tasks: install_gnu_stow.yaml
+
+- name: "Clone and update dotfiles repo"
+  ansible.builtin.git:
+    repo: "{{ ian_github_url }}/dotfiles.git"
+    dest: "{{ ansible_env.HOME }}/dotfiles"
+    version: main
+
+- name: "Stow desired configs"
+  loop: "{{ dev_env_configs_to_stow }}"
+  loop_control:
+    loop_var: config_name
+  ansible.builtin.command:
+    chdir: "{{ ansible_env.HOME }}/dotfiles"
+    cmd: "stow --dotfiles -v {{ config_name }}"
+  changed_when: false

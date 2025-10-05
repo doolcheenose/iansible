@@ -1,0 +1,6 @@
+---
+- name: "Clone homelab repository"
+  ansible.builtin.git:
+    repo: "{{ ian_github_url }}/homelab.git"
+    dest: "{{ ansible_env.HOME }}/homelab"
+    version: main

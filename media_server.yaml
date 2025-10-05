@@ -1,0 +1,14 @@
+---
+- name: "Install media server"
+  hosts: media_servers
+  remote_user: ian
+  gather_facts: true
+
+  roles:
+    - role: docker
+      tags: [docker]
+    - role: terraform
+      tags: [terraform]
+    - role: k3s
+      tags: [k3s]
+    - media_server
