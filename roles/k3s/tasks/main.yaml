@@ -35,3 +35,5 @@
     path: "{{ ansible_env.HOME }}/.bashrc"
     marker: "# {mark} ANSIBLE MANAGED BLOCK FOR K3S"
     block: 'export KUBECONFIG="$HOME/.kube/config"'
+    prepend_newline: true
+    append_newline: true

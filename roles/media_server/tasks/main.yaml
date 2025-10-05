@@ -4,3 +4,28 @@
     repo: "{{ ian_github_url }}/homelab.git"
     dest: "{{ ansible_env.HOME }}/homelab"
     version: main
+
+- name: "Create server directories"
+  ansible.builtin.file:
+    name: "{{ dir }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+  loop:
+    - /srv/data/
+    - /srv/data/media/
+    - /srv/data/torrents/
+    - /srv/jellyfin/
+    - /srv/jellyfin/config/
+    - /srv/jellyfin/cache/
+    - /srv/jellyseerr/config/
+    - /srv/radarr/config/
+    - /srv/prowlarr/config/
+    - /srv/gluetun/
+    - /srv/qBittorrent/
+    - /srv/qBittorrent/config/
+    - /srv/qBittorrent/logs/
+  loop_control:
+    loop_var: dir
+  become: true
