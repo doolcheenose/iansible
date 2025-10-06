@@ -14,8 +14,8 @@ Build and enter the Python environment with
 Run a playbook with the `ansible-playbook` command (from the Python environment). For example:
 
     ansible-playbook \
-        maintenance.yaml \    # which playbook to run
-        --limit pihole.local  # optionally limit to certain host(s)
+        maintenance.yaml \        # which playbook to run
+        --limit pi-zero-2w.local  # optionally limit to certain hosts or groups
 
 ### maintenance.yaml
 

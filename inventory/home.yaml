@@ -1,9 +1,9 @@
 desktops:
   hosts:
     desktop.local:
-piholes:
+pis:
   hosts:
-    pihole.local:
+    pi-zero-2w.local:
 media_servers:
   hosts:
     optiplex.local:
