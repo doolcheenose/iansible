@@ -19,8 +19,20 @@
       - git
   become: true
 
+- name: "Install gitconfig file for user"
+  ansible.builtin.copy:
+    src: git-config
+    dest: "{{ ansible_env.HOME }}/.gitconfig"
+    mode: "0644"
+
 - name: "Install GNU stow"
   ansible.builtin.include_tasks: install_gnu_stow.yaml
+
+- name: "Install TPM"
+  ansible.builtin.git:
+    repo: "https://github.com/tmux-plugins/tpm"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+    version: master
 
 - name: "Clone and update dotfiles repo"
   ansible.builtin.git:

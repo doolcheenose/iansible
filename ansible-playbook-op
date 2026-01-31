@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export ANSIBLE_BECOME_PASS="$(op item get "HomeLab Login" \
+  --vault Private \
+  --field password \
+  --reveal)"
+
+exec ansible-playbook "$@"

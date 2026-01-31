@@ -1,0 +1,15 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Ian Dulchinos
+	email = ian.dulchinos@gmail.com
+[core]
+	editor = nvim
+[init]
+	defaultBranch = main
+[alias]
+	s  = status
+	ci = commit
+	d  = diff
+	co = checkout
+	l  = log
+	f  = fetch
